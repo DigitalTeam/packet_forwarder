@@ -1,7 +1,18 @@
 {
     "SX1301_conf": {
         "lorawan_public": true,
-        "clksrc": 1, 
+        "clksrc": 1, /* radio_1 provides clock to concentrator */
+        "lbt_cfg": {
+            "enable": false,
+            "rssi_target": -80, /* dBm */
+            "chan_cfg":[ /* 8 channels maximum */
+                { "freq_hz": 867100000, "scan_time_us": 128 },
+                { "freq_hz": 867300000, "scan_time_us": 5000 },
+                { "freq_hz": 867500000, "scan_time_us": 128 },
+                { "freq_hz": 869525000, "scan_time_us": 128 }
+            ],
+            "sx127x_rssi_offset": -4 /* dB */
+        },
         "antenna_gain": 0, /* antenna gain, in dBi */
         "radio_0": {
             "enable": true,
@@ -9,6 +20,7 @@
             "freq": 867500000,
             "rssi_offset": -166.0,
             "tx_enable": true,
+            "tx_notch_freq": 129000, /* [126..250] KHz */
             "tx_freq_min": 863000000,
             "tx_freq_max": 870000000
         },
@@ -198,29 +210,11 @@
     },
 
     "gateway_conf": {
-        /* change with default server address/ports, or overwrite in local_conf.json */
         "gateway_ID": "AA555A0000000000",
-        /* Systems (set logger to true for logs per (!) packet) */
-        "gps": false,
-        "beacon": false,
-        "logger": true,
-        /* Streams */
-        "upstream": true,
-        "downstream": true,
-        "ghoststream": false,
-        "radiostream": true,
-        "statusstream": true,
-        /* node server, (for standard server, fall back for poly packet & multi protocol packet server) */
-        "server_address": "127.0.0.1",
+        /* change with default server address/ports, or overwrite in local_conf.json */
+        "server_address": "localhost",
         "serv_port_up": 1680,
-        "serv_port_down": 1681,
-        /* node servers for poly packet server (max 4 enabled, rest is ignored) */
-        "servers":
-        [ { "server_address": "router.eu.thethings.network",
-            "serv_port_up": 1700,
-            "serv_port_down": 1700,
-            "serv_max_stall": 0,
-            "serv_enabled": true } ],
+        "serv_port_down": 1680,
         /* adjust the following parameters for your network */
         "keepalive_interval": 10,
         "stat_interval": 30,
@@ -228,19 +222,6 @@
         /* forward only valid packets */
         "forward_crc_valid": true,
         "forward_crc_error": false,
-        "forward_crc_disabled": false,
-        /* GPS configuration */
-        "gps_tty_path": "/dev/ttyAMA0",
-        /* Ghost configuration (for simulating nodes) */
-        "ghost_address": "127.0.0.1",
-        "ghost_port": 1918,
-        /* Performance updates (if empty, nothing is send/written) */
-        "stat_format": "semtech",                 /* semtech or idee_verbose or idee_concise. */
-        "stat_damping": 50,                       /* 1 for least damping up to 99 for most damping. */
-        "stat_file": "stats.txt",                 /* Put or the whole path, or only a file name */
-        /* For human communication */
-        "platform": "*",                          /* Platform definition, put a asterix here for the system value, max 24 chars. */
-        "contact_email": "operator@gateway.tst",  /* Email of gateway operator, max 40 chars*/
-        "description": "Update me"                /* Public description of this device, max 64 chars */
+        "forward_crc_disabled": false
     }
 }
